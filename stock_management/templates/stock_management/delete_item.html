@@ -46,12 +46,11 @@
 
 <main class="container">
     <div class="bg-light p-5 rounded">
-        <h1>{{title}}</h1>
-        <form method="POST" action="">
+        <form method="post" action="">
             {% csrf_token %}
-            {{form|crispy}}
-            <br>
-            <input type="submit" value="Save">
+            <h1>Delete item ?</h1>
+            <input class="btn btn-danger" type="submit" value="Yes">
+            <a href="/items_list"><div class="btn btn-primary">Cancel</div></a>
         </form>
     </div>
 </main>

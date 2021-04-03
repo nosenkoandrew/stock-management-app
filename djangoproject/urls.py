@@ -22,4 +22,6 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('items_list/', views.items_list, name='items_list'),
     path('add_item/', views.add_item, name='add_item'),
+    path('update_item/<str:pk>/', views.update_item, name='update_item'),
+    path('delete_item/<str:pk>/', views.delete_item, name='delete_item'),
 ]
