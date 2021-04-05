@@ -11,10 +11,6 @@ class StockCreateForm(forms.ModelForm):
         category = self.cleaned_data.get('category')
         if not category:
             raise forms.ValidationError('This field if required')
-
-        for instance in Stock.objects.all():
-            if instance.category == category:
-                raise forms.ValidationError(category + ' is already created')
         return category
 
     def clean_item_name(self):
@@ -25,6 +21,8 @@ class StockCreateForm(forms.ModelForm):
 
 
 class StockSearchForm(forms.ModelForm):
+    export_to_CSV = forms.BooleanField(required=False)
+
     class Meta:
         model = Stock
         fields = ['category', 'item_name']
