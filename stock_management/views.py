@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
 from .models import Stock
-from .forms import StockCreateForm, StockSearchForm, StockUpdateForm, IssueForm, ReceiveForm
+from .forms import StockCreateForm, StockSearchForm, StockUpdateForm, IssueForm, ReceiveForm, ReorderLevelForm
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 import csv
 
 
@@ -14,6 +15,7 @@ def home(request):
     return render(request, 'stock_management/home.html', context)
 
 
+@login_required
 def items_list(request):
     header = 'List of items'
     form = StockSearchForm(request.POST or None)
@@ -46,6 +48,7 @@ def items_list(request):
     return render(request, 'stock_management/items_list.html', context)
 
 
+@login_required
 def add_item(request):
     form = StockCreateForm(request.POST or None)
     if form.is_valid():
@@ -131,5 +134,21 @@ def receive_items(request, pk):
             "instance": queryset,
             "form": form,
             "username": 'Receive By: ' + str(request.user),
+    }
+    return render(request, "stock_management/add_item.html", context)
+
+
+def reorder_level(request, pk):
+    queryset = Stock.objects.get(id=pk)
+    form = ReorderLevelForm(request.POST or None, instance=queryset)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        messages.success(request, "Reorder level for " + str(instance.item_name) + " is updated to " + str(instance.reorder_level))
+
+        return redirect("/items_list")
+    context = {
+            "instance": queryset,
+            "form": form,
     }
     return render(request, "stock_management/add_item.html", context)
