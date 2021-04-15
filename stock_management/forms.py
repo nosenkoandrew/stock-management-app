@@ -50,5 +50,3 @@ class ReorderLevelForm(forms.ModelForm):
     class Meta:
         model = Stock
         fields = ['reorder_level']
-
-
